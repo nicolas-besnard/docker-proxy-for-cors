@@ -1,0 +1,28 @@
+server {
+  listen 80;
+  server_name localhost;
+
+
+  location / {
+
+    add_header 'Access-Control-Allow-Origin' '*';
+    add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE';
+    add_header 'Access-Control-Allow-Headers' 'Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Mx-ReqToken,Keep-Alive,X-Requested-With,If-Modified-Since';
+    add_header 'Access-Control-Max-Age' '1728000';
+
+
+    proxy_set_header        Host            $host;
+    proxy_set_header        X-Real-IP       $remote_addr;
+    proxy_set_header Referer $http_referer;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    if ($request_method = 'OPTIONS') {
+      add_header 'Content-Length' 0;
+      add_header 'Content-Type' 'text/plain charset=UTF-8';
+      return 204;
+    }
+
+    proxy_pass $HOST_TO_PROXY;
+  }
+}
